@@ -101,10 +101,7 @@ Results and reports will be saved under `/reports`.
 
 ---
 
-## 🧑‍💻 Author
+### Connect with me:
 
-**Vishnu**
-💼 GitHub: [@<your-username>](https://github.com/<your-username>)
-📧 Contact: *[your-email@example.com](mailto:your-email@example.com)*
-
----
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-its--vishnu--verma-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/its-vishnu-verma/)
+[![Email](https://img.shields.io/badge/Email-ui22ec86@iiitsurat.ac.in-D14836?style=flat-square&logo=gmail)](mailto:ui22ec86@iiitsurat.ac.in)
