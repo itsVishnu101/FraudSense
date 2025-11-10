@@ -1,106 +1,228 @@
- # 💳 Credit Card Fraud Detection
+## 🧠 FraudSense — Credit Card Fraud Detection 
 
-Detecting fraudulent credit card transactions using machine learning techniques.  
-This project builds a complete end-to-end pipeline — from data preprocessing and feature engineering to model training, evaluation, and prediction.
+> **FraudSense** is a complete machine learning project that detects fraudulent credit card transactions using the **Kaggle 2013 European Cardholders dataset**.
+> It compares **Logistic Regression**, **Decision Tree**, **Random Forest**, and **XGBoost**, evaluates them on **Accuracy**, **Recall**, and **F1-score**, and deploys the best model via a **Flask web app**.
 
 ---
 
-## 📘 Overview
-Credit card fraud is a major issue in financial systems, where fraudulent transactions are rare but costly.  
-This project demonstrates how to use machine learning to identify such anomalies in highly imbalanced datasets with high precision and recall.
+### 📂 Project Structure
 
-The notebook and scripts showcase data exploration, preprocessing, model building, evaluation, and performance visualization.
+```bash
+FraudSense/
+├── app.py                    # Flask web app for predictions
+├── train_models.py           # Model training & comparison script
+├── FraudSense_Colab.ipynb    # Google Colab notebook (EDA + model comparison)
+├── requirements.txt          # Required Python libraries
+├── README.md                 # Documentation (this file)
+├── templates/
+│   ├── index.html            # Upload UI
+│   └── results.html          # Results page
+├── static/
+│   └── css/style.css         # Modern responsive UI styling
+├── models/
+│   └── final_model.pkl       # Saved best model (after training)
+└── uploads/                  # Uploaded + predicted CSVs
+```
 
 ---
 
 ## 🚀 Features
-- Clean and reproducible ML workflow  
-- Handles data imbalance using SMOTE / class weighting  
-- Multiple models: Logistic Regression, Random Forest, XGBoost  
-- Evaluation using ROC-AUC, Precision-Recall, F1-score  
-- Model persistence with `joblib`  
-- Optional SHAP-based explainability  
-- Ready-to-run Jupyter notebook for experimentation  
 
-````
-
----
-
-## 🧠 Dataset
-The project uses the [Kaggle Credit Card Fraud Detection dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud), which contains transactions made by European cardholders in September 2013.
-
-- **Total Transactions:** 284,807  
-- **Fraudulent Transactions:** 492 (0.172%)  
-- **Features:** 30 (V1–V28 PCA components + Time + Amount)  
-- **Target:** `Class` → 1 (Fraud), 0 (Legit)
+✅ Compares 4 ML models
+✅ Evaluates with **Accuracy**, **Recall**, and **F1-score**
+✅ Balances classes using **SMOTE**
+✅ Saves the **best model automatically**
+✅ Provides **Flask Web App** for predictions
+✅ Clean and **responsive web UI**
+✅ Optional **Google Colab notebook** for easy training and visualization
 
 ---
 
-## ⚙️ Installation
+## 📊 Dataset Overview (2013 Credit Card Fraud)
 
-Clone the repository and install dependencies:
+* Source: [Kaggle — Credit Card Fraud Detection (2013)](https://www.kaggle.com/mlg-ulb/creditcardfraud)
+* Records: **284,807 transactions**
+* Features: **Time, Amount, V1–V28 (PCA features)**
+* Target: **Class** → `0` = Legit, `1` = Fraud
+
+### Example Data Snapshot
+
+| Time | V1      | V2      | V3     | ... | Amount | Class |
+| ---- | ------- | ------- | ------ | --- | ------ | ----- |
+| 0    | -1.3598 | -0.0728 | 2.5363 | ... | 149.62 | 0     |
+| 1    | 1.1918  | 0.2662  | 0.1664 | ... | 2.69   | 0     |
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/Credit-Card-Fraud-Detection.git
-cd Credit-Card-Fraud-Detection
+git clone https://github.com/itsVishnu101/FraudSense.git
+cd FraudSense
+```
+
+### 2️⃣ Install dependencies
+
+```bash
 pip install -r requirements.txt
-````
-
----
-
-## 🧩 Usage
-
-### 🏋️‍♂️ Train the Model
-
-```bash
-python src/train.py
 ```
 
-### 🧪 Evaluate
+### 3️⃣ Place dataset
+
+Download the Kaggle 2013 `creditcard.csv` and place it in the **project root**.
+
+### 4️⃣ Train and compare models
 
 ```bash
-python src/evaluate.py
+python train_models.py
 ```
 
-### 🔍 Predict on New Transactions
+This script will:
+
+* Compare Logistic Regression, Decision Tree, Random Forest, and XGBoost
+* Print Accuracy, Recall, and F1 for each
+* Save the **best model** as `models/final_model.pkl`
+* Generate `sample_input.csv` for quick web testing
+
+---
+
+## 📈 Model Comparison Example (Colab Results)
+
+| Model               | Accuracy   | Recall   | F1-score   |
+| ------------------- | ---------- | -------- | ---------- |
+| Logistic Regression | 0.9992     | 0.90     | 0.94       |
+| Decision Tree       | 0.9985     | 0.86     | 0.91       |
+| Random Forest       | 0.9994     | 0.92     | 0.95       |
+| XGBoost             | **0.9995** | **0.93** | **0.96** ✅ |
+
+*(values vary slightly on each run depending on random seed & SMOTE)*
+
+**Best Model:** 🏆 **XGBoost**
+
+---
+
+## 💻 Run the Flask App
+
+After training, start the web server:
 
 ```bash
-python src/predict.py --input sample.csv
+python app.py
 ```
 
-Results and reports will be saved under `/reports`.
+Then open in browser:
+
+```
+http://127.0.0.1:5000/
+```
+
+### 🧾 Upload CSV for prediction
+
+* Upload a file with columns: `Time, V1, V2, …, V28, Amount`
+* Get downloadable CSV with:
+
+  * `prediction` (0 = Legit, 1 = Fraud)
+  * `fraud_probability` (if model supports it)
 
 ---
 
-## 📊 Model Performance (Example)
+## 🌐 Web UI Preview
 
-|   Metric  | Logistic Regression | Random Forest | XGBoost |
-| :-------: | :-----------------: | :-----------: | :-----: |
-|  Accuracy |        99.93%       |     99.95%    |  99.96% |
-| Precision |         0.88        |      0.92     |   0.94  |
-|   Recall  |         0.82        |      0.86     |   0.89  |
-|  ROC-AUC  |         0.99        |     0.998     |  0.999  |
+### 🏠 Home Page
 
-*(Values are illustrative — replace with your real results.)*
+Upload your transaction CSV to analyze:
+
+```html
++-----------------------------------------+
+| FraudSense – Credit Card Fraud Detector |
+| Upload a CSV [Choose File] [Predict]    |
++-----------------------------------------+
+```
+
+### 📊 Results Page
+
+Displays summary metrics:
+
+```
+Total Transactions: 300
+Predicted Frauds: 2 (0.67%)
+[Download Results]
+```
+
+---
+
+## 🧪 Google Colab Notebook
+
+To experiment interactively, open the provided notebook:
+
+**📘 [FraudSense_Colab.ipynb](./FraudSense_Colab.ipynb)**
+
+This includes:
+
+* Data exploration & visualization
+* Model comparison
+* Metrics chart (Accuracy / Recall / F1)
+* Automatic saving of best model
+
+```python
+# Example snippet
+from xgboost import XGBClassifier
+model = XGBClassifier(eval_metric='logloss')
+model.fit(X_train_bal, y_train_bal)
+```
 
 ---
 
-## 🧭 Future Improvements
+## 🧩 Tech Stack
 
-* Incorporate deep learning (Autoencoders / LSTMs)
-* Real-time detection API using FastAPI or Flask
-* Feature importance visualization via SHAP
-* Model deployment with Streamlit dashboard
+| Category          | Technologies                                           |
+| ----------------- | ------------------------------------------------------ |
+| **Languages**     | Python 3                                               |
+| **Libraries**     | scikit-learn, xgboost, imbalanced-learn, pandas, numpy |
+| **Web Framework** | Flask                                                  |
+| **Frontend**      | HTML, CSS (responsive UI)                              |
+| **Notebook Env**  | Google Colab / Jupyter                                 |
+
+---
+
+## 📦 Deployment (Optional)
+
+To containerize & deploy with Docker:
+
+```dockerfile
+FROM python:3.10
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+```
+
+Then:
+
+```bash
+docker build -t fraudsense .
+docker run -p 5000:5000 fraudsense
+```
 
 ---
 
-## 🧰 Tech Stack
+## 📜 License
 
-* **Language:** Python 3.9+
-* **Libraries:** scikit-learn, pandas, numpy, matplotlib, seaborn, XGBoost, imbalanced-learn, SHAP
+MIT License © 2025 — Developed by **Vishnu Verma**
 
 ---
-### Connect with me:
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/its-vishnu-verma/)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail)](mailto:ui22ec86@iiitsurat.ac.in)
+## ⭐ Contribute
+
+Pull requests are welcome!
+If you like this project, please ⭐ it on GitHub — it helps a lot!
+
+---
+
+## 📬 Contact
+
+**Author:** Vishnu Verma
+**Email:** (ui22ec86@iiitsurat.ac.in)
+**GitHub:** [itsVishnu101](https://github.com/itsVishnu101)
+
